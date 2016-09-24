@@ -1,4 +1,11 @@
-angular.module('starter.controllers', [])
+angular.module('transit.controllers', [])
+
+.controller('RoutesCtrl', function($scope, Routes) {
+  $scope.routes = Routes.get('chapel-hill');
+})
+
+
+
 
 .controller('DashCtrl', function($scope) {})
 

@@ -1,4 +1,23 @@
-angular.module('starter.services', [])
+angular.module('transit.services', [])
+
+.factory('Routes', function($http, JSON) {
+  var routesList = function(agency) {
+    $http.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a='+agency)
+       .success(function(data, status) {
+         routes = JSON.convert(data);
+         console.log(routes);
+       })
+       .error(function(data, status) {
+
+       });
+  };
+
+  return {
+    get: function(agency) {
+      return routesList(agency);
+    }
+  }
+})
 
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array
