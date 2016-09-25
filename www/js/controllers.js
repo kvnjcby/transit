@@ -10,7 +10,13 @@ angular.module('transit.controllers', [])
 })
 
 
-.controller('DashCtrl', function($scope) {})
+.controller('MapCtrl', function($scope) {
+  angular.extend($scope, {
+    defaults: {
+        
+    }
+  });
+})
 
 .controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
