@@ -1,21 +1,26 @@
 angular.module('transit.services', [])
 
-.factory('Routes', function($http, JSON) {
-  var routesList = function(agency) {
-    $http.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a='+agency)
-       .success(function(data, status) {
-         routes = JSON.convert(data);
-         console.log(routes);
-       })
-       .error(function(data, status) {
+.factory('Routes', function($http, $q) {
+  var data;
 
-       });
+  var routesList = function(agency) {
+    return $http.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a='+agency)
+                .then(function(response) {
+                  console.log(response);
+                  if (typeof response.data === 'string') {
+                    var x2js = new X2JS();
+                    return x2js.xml_str2json(response.data).body.route;
+                  } else {
+                    return $q.reject(response.data);
+                  }
+                }, function(response) {
+                  // error
+                  return $q.reject(response.data);
+                });
   };
 
   return {
-    get: function(agency) {
-      return routesList(agency);
-    }
+    get: routesList
   }
 })
 

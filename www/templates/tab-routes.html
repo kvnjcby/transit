@@ -2,8 +2,8 @@
   <ion-content>
     <ion-list>
       <ion-item ng-repeat="route in routes" type="item-text-wrap" href="#/tab/routes/{{route.id}}">
-        <p>{{route}}</p>
-
+        <h2>{{route._tag}}</h2>
+        <p>{{route._title}}</p>
       </ion-item>
     </ion-list>
   </ion-content>

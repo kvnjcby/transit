@@ -1,10 +1,13 @@
 angular.module('transit.controllers', [])
 
 .controller('RoutesCtrl', function($scope, Routes) {
-  $scope.routes = Routes.get('chapel-hill');
+  Routes.get('chapel-hill').then(function(data) {
+    $scope.routes = data;
+    console.log($scope);
+  }, function(error) {
+    console.log(error);
+  });
 })
-
-
 
 
 .controller('DashCtrl', function($scope) {})
