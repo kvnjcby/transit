@@ -1,8 +1,6 @@
 angular.module('transit.services', [])
 
 .factory('Routes', function($http, $q) {
-  var data;
-
   var routesList = function(agency) {
     return $http.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a='+agency)
                 .then(function(response) {
@@ -19,8 +17,30 @@ angular.module('transit.services', [])
                 });
   };
 
+  var routeConfig = function(agency, route) {
+    return $http.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a='+ agency +'&r='+ route)
+                .then(function(response) {
+
+                  
+                  // need to check for 200 ok
+
+                  if (typeof response.data === 'string') {
+                    var x2js = new X2JS();
+                    console.log(x2js.xml_str2json(response.data).body.route);
+                    return x2js.xml_str2json(response.data).body.route;
+                  } else {
+                    return $q.reject(response.data);
+                  }
+                  
+                }, function(response) {
+                  // error
+                  return $q.reject(response.data);
+                });
+  };
+
   return {
-    get: routesList
+    routesList: routesList,
+    routeConfig: routeConfig
   }
 })
 
