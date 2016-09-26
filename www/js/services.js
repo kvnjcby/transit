@@ -21,7 +21,7 @@ angular.module('transit.services', [])
     return $http.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a='+ agency +'&r='+ route)
                 .then(function(response) {
 
-                  
+
                   // need to check for 200 ok
 
                   if (typeof response.data === 'string') {
@@ -41,7 +41,24 @@ angular.module('transit.services', [])
   return {
     routesList: routesList,
     routeConfig: routeConfig
-  }
+  };
+})
+
+.factory('Location', function($q) {
+  return {
+    get: function() {
+           var deferred = $q.defer();
+
+           navigator.geolocation.getCurrentPosition(function(pos) {
+             deferred.resolve(pos);
+           },
+           function(error) {
+             deferred.reject(error);
+           });
+
+           return deferred.promise;
+         }
+  };
 })
 
 .factory('Chats', function() {

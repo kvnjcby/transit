@@ -10,16 +10,25 @@ angular.module('transit.controllers', [])
 })
 
 
-.controller('MapCtrl', function($scope, Routes) {
-  var map = L.map("map").setView([35.9132, -79.055847], 15);
+.controller('MapCtrl', function($scope, Routes, Location) {
+  $scope.map = L.map("map").setView([35.9132, -79.055847], 15);
   L.tileLayer('https://api.mapbox.com/styles/v1/kvnjcby/citj0f2bx001f2hln880n99cc/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoia3ZuamNieSIsImEiOiJjaXRqMGVjdDAwNnlyMnhudnYxajU0MHl0In0.FynXzTZV9AgE8SSvjJPXtg', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     maxZoom: 18,
     id: 'your.mapbox.project.id',
     accessToken: 'pk.eyJ1Ijoia3ZuamNieSIsImEiOiJjaXRqMGVjdDAwNnlyMnhudnYxajU0MHl0In0.FynXzTZV9AgE8SSvjJPXtg'
-  }).addTo(map);
+  }).addTo($scope.map);
 
-  Routes.routeConfig('chapel-hill', 'A');
+  Location.get().then(function(pos) {
+    L.circleMarker([pos.coords.latitude, pos.coords.longitude], {color: '#ffffff'}).addTo($scope.map);
+  });
+
+
+  Routes.routeConfig('chapel-hill', 'A').then(function(data) {
+      angular.forEach(data.stop, function(value, key) {
+        L.marker([value._lat, value._lon]).addTo($scope.map);
+      });
+  });
 
 })
 
